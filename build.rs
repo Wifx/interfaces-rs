@@ -33,17 +33,17 @@ fn main() {
 
 fn template_file(in_path: &PathBuf, out_path: &PathBuf) -> Result<(), Error> {
     // Open and read the file.
-    let mut f = try!(File::open(in_path));
+    let mut f = File::open(in_path)?;
     let mut s = String::new();
-    try!(f.read_to_string(&mut s));
+    f.read_to_string(&mut s)?;
 
     let mut handlebars = hbs::Handlebars::new();
-    try!(handlebars.register_template_string("template", s));
+    handlebars.register_template_string("template", s)?;
 
-    let mut f = try!(File::create(out_path));
+    let mut f = File::create(out_path)?;
 
     let data = make_data();
-    try!(handlebars.renderw("template", &data, &mut f));
+    handlebars.renderw("template", &data, &mut f)?;
 
     Ok(())
 }
